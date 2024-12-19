@@ -1,55 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App</title>
+    <title>Регистрация</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
         }
         .container {
-            text-align: center;
+            max-width: 400px;
+            width: 100%;
             background-color: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #555;
+            display: block;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #333;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            background-color: #4CAF50;
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
             color: white;
-            border-radius: 5px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Добро пожаловать в Web App</h1>
-        <p>Это простой интерфейс веб-приложения для Telegram</p>
-        <button onclick="sendData()">Отправить данные в Telegram</button>
+        <h1>Регистрация</h1>
+        <form id="registrationForm">
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
+            
+            <label for="email">Электронная почта:</label>
+            <input type="email" id="email" name="email" placeholder="Введите ваш email" required>
+            
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+            
+            <span class="error" id="error">Пожалуйста, заполните все поля.</span>
+            
+            <button type="button" onclick="sendDataToBot()">Зарегистрироваться</button>
+        </form>
     </div>
 
     <script>
-    function sendDataToBot() {
-        const telegram = window.Telegram.WebApp;
-        telegram.sendData("Привет, это данные из веб-приложения!"); // Данные, которые мы отправляем
-    }
+        function sendDataToBot() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('error');
 
-    // Включаем Web App в Telegram
-    window.Telegram.WebApp.ready();
-</script>
+            // Проверка на заполнение полей
+            if (name && email && password) {
+                errorElement.style.display = 'none';  // Скрываем сообщение об ошибке
+
+                const userData = {
+                    name: name,
+                    email: email,
+                    password: password
+                };
+
+                const telegram = window.Telegram.WebApp;
+                telegram.sendData(JSON.stringify(userData));  // Отправляем данные как JSON
+            } else {
+                errorElement.style.display = 'block';  // Показываем сообщение об ошибке
+            }
+        }
+
+        // Инициализация Web App
+        window.Telegram.WebApp.ready();
+    </script>
+
 </body>
 </html>
