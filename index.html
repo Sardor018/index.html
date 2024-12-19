@@ -43,10 +43,13 @@
     </div>
 
     <script>
-        function sendData() {
-            // Отправка данных обратно боту
-            Telegram.WebApp.sendData("Hello from Web App!");
-        }
-    </script>
+    function sendDataToBot() {
+        const telegram = window.Telegram.WebApp;
+        telegram.sendData("Привет, это данные из веб-приложения!"); // Данные, которые мы отправляем
+    }
+
+    // Включаем Web App в Telegram
+    window.Telegram.WebApp.ready();
+</script>
 </body>
 </html>
